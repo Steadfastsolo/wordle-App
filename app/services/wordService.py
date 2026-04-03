@@ -2,11 +2,11 @@ from datetime import date
 from pathlib import Path
 
 
-# Cache the word list so it only loads once
+# Cache the solution word list so it only loads once
 _WORDS: list[str] | None = None
 
 
-def _load_words() -> list[str]:
+def loadWords() -> list[str]:
     
     # Load and return all valid 5-letter words.
     
@@ -30,6 +30,33 @@ def _load_words() -> list[str]:
     return words
 
 def getDailyWord() -> str:
-    words = _load_words()
+    words = loadWords()
     index = date.today().toordinal() % len(words)
     return words[index]
+
+
+# Cache the allowed word list so it only loads once
+_ALLOWED_WORDS: set[str] | None = None
+
+
+def loadAllowedWords() -> set[str]:
+    global _ALLOWED_WORDS
+    if _ALLOWED_WORDS is not None:
+        return _ALLOWED_WORDS
+
+    path = Path(__file__).resolve().parents[2] / "words" / "allowed.txt"
+
+    with open(path, "r") as f:
+        words = {
+            line.strip().lower()
+            for line in f
+            if line.strip().isalpha() and len(line.strip()) == 5
+        }
+
+    _ALLOWED_WORDS = words
+    return words
+
+
+def isValidWord(word: str) -> bool:
+    words = loadAllowedWords()
+    return word.lower() in words

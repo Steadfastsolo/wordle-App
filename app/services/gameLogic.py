@@ -76,7 +76,7 @@ class Game:
             
         # second pass to see if any letters are in the word but at the wrong position
         for i in range(len(guessArray)):
-            if (guessArray[i] in tempArray):
+            if (resultArray[i] == "gray" and guessArray[i] in tempArray):
                 resultArray[i] = "yellow"
                 # if the letter is guessed for the first time, add it to the yellowArray
                 if (self.yellowArray.count(guessArray[i]) == 0):
@@ -84,14 +84,6 @@ class Game:
 
         # remove one attempt from the counter
         self.numAttempts = self.numAttempts - 1
-
-        # print resultArray, greenArray, yellowArray for bug testing 
-        print("\nResult Array:")
-        print(resultArray)
-        print("Green Array:")
-        print(self.greenArray)
-        print("Yellow Array:")
-        print(self.yellowArray)
 
         # return resultArray
         return resultArray 
